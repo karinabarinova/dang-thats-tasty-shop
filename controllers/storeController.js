@@ -1,8 +1,41 @@
 const mongoose = require('mongoose')
 const Store = mongoose.model('Store');
+const multer = require('multer')
+const jimp = require('jimp')
+const uuid = require('uuid')
+
+const multerOption = {
+    //where will the file be stored when it's uploaded
+    storage: multer.memoryStorage(), //into memory
+    //what types of file are allowed
+    fileFilter (req, file, next) {
+        const isPhoto = file.mimetype.startsWith('image/');
+        if (isPhoto)
+            next(null, true)
+        else
+            next({ message: 'That file type isn\'t allowed!'}, false)
+    }
+}
 
 exports.addStore = (req, res) => {
     res.render('editStore', { title: 'Add Store'})
+}
+
+exports.upload = multer(multerOption).single('photo');
+exports.resize = async (req, res, next) => {
+    //check if there no new file to resize
+    if (!req.file) {
+        next();
+        return;
+    }
+    const fileExtension = req.file.mimetype.split('/')[1];
+    req.body.photo = `${uuid.v4()}.${fileExtension}`; 
+    //now we resize
+    const photo = await jimp.read(req.file.buffer); //passing buffer
+    await photo.resize(800, jimp.AUTO);
+    await photo.write(`./public/uploads/${req.body.photo}`);
+    //once we have written photo to out filesystem, keep going!
+    next();
 }
 
 exports.createStore = async (req, res) => {
