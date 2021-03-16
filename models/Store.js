@@ -26,14 +26,19 @@ const StoreSchema = new mongoose.Schema({
         },
         coordinates: [{
             type: Number,
-            require: 'You must supply coordinates'
+            required: 'You must supply coordinates'
         }],
         address: {
             type: String,
             required: 'You must supply an address'
         }
     },
-    photo: String
+    photo: String,
+    author: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+        required: 'You must supply an author'
+    }
 });
 
 StoreSchema.pre('save', async function(next) {
