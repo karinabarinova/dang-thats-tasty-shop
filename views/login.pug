@@ -1,7 +1,9 @@
 extends layout 
 
 include mixins/loginForm
+include mixins/passwordReset
 
 block content
     .inner
         +loginForm()
+        +passwordReset()
