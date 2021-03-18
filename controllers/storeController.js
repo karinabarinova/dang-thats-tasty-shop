@@ -86,3 +86,20 @@ exports.getStoresByTag = async (req, res) => {
     const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
     res.render('tag', {tags, stores, title: 'Tags', tag})
 }
+
+//API
+exports.searchStores = async (req, res) => {
+    const stores = await Store
+    .find({
+        $text: {
+            $search: req.query.q
+        }
+    },{
+        score: { $meta: 'textScore'}
+    })
+    .sort({
+        score: { $meta: 'textScore'}
+    })
+    //limit to only 5 stores
+    .limit(5)
+}

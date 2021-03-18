@@ -41,6 +41,12 @@ const StoreSchema = new mongoose.Schema({
     }
 });
 
+//Define index
+StoreSchema.index({
+    name: 'text',
+    description: 'text'
+});
+
 StoreSchema.pre('save', async function(next) {
     if (!this.isModified('name')) {
         next(); //skip it
