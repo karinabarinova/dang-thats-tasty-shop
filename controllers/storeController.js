@@ -87,6 +87,10 @@ exports.getStoresByTag = async (req, res) => {
     res.render('tag', {tags, stores, title: 'Tags', tag})
 }
 
+exports.mapPage = (req, res) => {
+    res.render('map', {title: 'Map'})
+}
+
 //API
 exports.searchStores = async (req, res) => {
     const stores = await Store
@@ -119,6 +123,6 @@ exports.mapStore = async (req, res) => {
         }
     }
 
-    const stores = await Store.find(query).select('slug name description location').limit(10);
+    const stores = await Store.find(query).select('slug name description location photo').limit(10);
     res.json(stores);
 }
