@@ -102,4 +102,5 @@ exports.searchStores = async (req, res) => {
     })
     //limit to only 5 stores
     .limit(5)
+    res.json(stores)
 }
