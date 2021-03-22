@@ -99,6 +99,11 @@ exports.getHearts = async (req, res) => {
     res.render('stores', {title: 'Favourite Stores', stores})
 }
 
+exports.getTopStores = async (req, res) => {
+    const stores = await Store.getTopStores();
+    res.render('topStores', { stores, title: 'Top Stores'})
+}
+
 //API
 exports.searchStores = async (req, res) => {
     const stores = await Store
